@@ -1,0 +1,26 @@
+{
+  "name": "typescript-nuxt-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
+    "export": "nuxt-ts export",
+    "serve": "nuxt-ts serve"
+  },
+  "dependencies": {
+    "@nuxt/typescript-runtime": "^0.4.10",
+    "bootstrap": "^4.5.0",
+    "bootstrap-vue": "^2.15.0",
+    "nuxt": "^2.13.0",
+    "nuxt-property-decorator": "^2.7.2",
+    "pug-plain-loader": "^1.0.0",
+    "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^1.0.3",
+    "pug": "^3.0.0",
+    "vuex-module-decorators": "^0.17.0"
+  }
+}
