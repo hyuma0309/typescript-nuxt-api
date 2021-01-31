@@ -5,6 +5,5 @@ h1 hello world
 import { Component, Vue } from 'nuxt-property-decorator';
 
 @Component
-export default class EntryInput extends Vue {
-}
+export default class Products extends Vue {}
 </script>
