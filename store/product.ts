@@ -59,7 +59,7 @@ export const mutations = {
 export const actions = {
   async createProduct({}: any, { token, payload }: any) {
     try {
-      await axios.post(API_ENDPOINT.NUXT_APP_HOST, payload, {
+      await axios.post(API_ENDPOINT.JAVA_APP_HOST, payload, {
         headers: {
           Authorization: `Bearer:${token}`,
           'Content-Type': 'application/json',
