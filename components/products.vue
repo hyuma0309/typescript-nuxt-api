@@ -1,26 +1,33 @@
 <template>
-<ul>
-      <li v-for="(product, index) in products" :key="index">
-        <span>{{ product.title }}</span>
-        <span>{{ product.description }}</span>
-        <span>{{ product.price }}</span>
-        <button @click="remove(product)">削除</button>
-        <button @click="edit(index)">編集</button>
-        <p>
-          <input type="text" name="editForm" v-model="editForm" />
-        </p>
-      </li>
-    </ul>
+  <ul>
+    <li v-for="(product, index) in products" :key="index">
+      <span>{{ product.title }}</span>
+      <span>{{ product.description }}</span>
+      <span>{{ product.price }}円</span>
+      <button @click="remove(product.id)">削除</button>
+      <button @click="edit(product.id)">編集</button>
+    </li>
+  </ul>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { IProduct, IProductPayload } from '~/interfaces/IProducts';
+import { IProduct } from '@/interfaces/IProducts';
 
 @Component
 export default class Products extends Vue {
+  public id!: number;
 
-  get products(): IProduct[] {
+  public get products(): IProduct[] {
     return this.$store.getters['product/getProducts'];
   }
+
+  public remove(id: number) {
+    this.$emit('delete', id);
+  }
+
+  public edit(id: string){
+    this.$router.push({ path: 'edit', query: { id } })
+  }
+
 }
 </script>

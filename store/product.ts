@@ -21,7 +21,7 @@ export const state = (): IState => ({
     title: '',
     description: '',
     price: 0,
-    image: '',
+    image: ''
   },
 });
 
@@ -68,16 +68,62 @@ export const actions = {
           'Content-Type': 'application/json',
         },
       });
-      console.log(products.data)
       commit('saveProducts', products.data);
     } catch (error) {
       throw error;
     }
   },
 
+  // 一件取得処理
+  async getProduct({ commit }: any, { token, id }: any) {
+    try {
+      const response = await axios.get(
+        `${API_ENDPOINT.JAVA_APP_HOST}/${id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      commit('saveProduct', response.data)
+    } catch(error) {
+      throw error
+    }
+  },
+
+  //作成処理
   async createProduct({}: any, { token, payload }: any) {
     try {
       await axios.post(API_ENDPOINT.JAVA_APP_HOST, payload, {
+        headers: {
+          Authorization: `Bearer:${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 編集処理
+  async editProduct({}: any, { token, id, payload }: any) {
+    console.log(payload)
+    try {
+      await axios.put(`${API_ENDPOINT.JAVA_APP_HOST}/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer:${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  //削除処理
+  async deleteProduct({}: any, { token, id }: any) {
+    try {
+      await axios.delete(`${API_ENDPOINT.JAVA_APP_HOST}/${id}`, {
         headers: {
           Authorization: `Bearer:${token}`,
           'Content-Type': 'application/json',
