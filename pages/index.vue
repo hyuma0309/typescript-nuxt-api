@@ -1,5 +1,8 @@
 <template>
-  <Form @send="createItem" />
+  <div>
+    <Form @send="createItem" />
+    <Products />
+  </div>
 </template>
 
 <script lang="ts">
@@ -17,6 +20,16 @@ import { TokenUtil } from '@/utilities/tokenUtil';
   },
 })
 export default class IndexPage extends Vue {
+  public async getAll() {
+    const token = TokenUtil.getToken();
+    try {
+      await this.$store.dispatch('product/getAll', token);
+      console.log('成功');
+    } catch (error) {
+      console.log('エラー出ました');
+    }
+  }
+
   public async createItem(value: IProductPayload) {
     const token = TokenUtil.getToken();
     try {
@@ -25,6 +38,14 @@ export default class IndexPage extends Vue {
     } catch (error) {
       console.log('エラー出ました');
     }
+  }
+
+  /**
+   * ライフサイクル
+   * localStrageを参照するためmountedで取得
+   */
+  mounted() {
+    this.getAll();
   }
 }
 </script>

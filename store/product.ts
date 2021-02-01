@@ -57,6 +57,24 @@ export const mutations = {
  * actions
  */
 export const actions = {
+  /**
+   * 商品情報一覧を取得
+   */
+  async getAll({ commit }: any, token: string) {
+    try {
+      const products = await axios.get(API_ENDPOINT.JAVA_APP_HOST, {
+        headers: {
+          Authorization: `Bearer:${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(products.data)
+      commit('saveProducts', products.data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async createProduct({}: any, { token, payload }: any) {
     try {
       await axios.post(API_ENDPOINT.JAVA_APP_HOST, payload, {
