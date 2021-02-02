@@ -2,7 +2,18 @@
   <div>
     <Authentication />
     <Form @send="createItem" />
-    <Products @delete="removeItem"/>
+    <Products @delete="removeItem" />
+    <br />
+    <input @focus="onFocus" type="text" placeholder="タイトル" v-model="keyword" />
+    <button @click="searchItem()">検索</button>
+    <div v-for="(product, index) in products" :key="index">
+      <div v-if="product.isVisible">
+        {{ product.title }}
+        {{ product.description }}
+        {{ product.price }}円
+      </div>
+    </div>
+    {{ errorMessage }}
   </div>
 </template>
 
@@ -18,10 +29,25 @@ import { TokenUtil } from '@/utilities/tokenUtil';
   components: {
     Products,
     Form,
-    Authentication
+    Authentication,
   },
 })
 export default class IndexPage extends Vue {
+  public keyword: string = '';
+  public errorMessage: string = '';
+
+  /** 入力欄を操作時、検索結果を削除 */
+  public onFocus(): void {
+    const matchTitle = this.products.filter(product => product.isVisible == true);
+      matchTitle.forEach(product => {
+        this.$store.commit('product/changeFlag', product);
+      });
+  }
+
+  public get products(): IProduct[] {
+    return this.$store.getters['product/getProducts'];
+  }
+
   public async getAll() {
     const token = TokenUtil.getToken();
     try {
@@ -54,6 +80,21 @@ export default class IndexPage extends Vue {
       await this.$store.dispatch('product/getAll', token);
     } catch (error) {
       console.log(error.response);
+    }
+  }
+
+  public searchItem() {
+    const matchTitle = this.products.filter(product => product.title.includes(this.keyword));
+    if (!matchTitle.length) {
+      this.errorMessage = '検索結果がありませんでした';
+      this.keyword = '';
+    } else {
+      matchTitle.forEach(product => {
+        console.log(product.isVisible)
+        this.$store.commit('product/changeFlag', product);
+      });
+      this.errorMessage = '';
+      this.keyword = '';
     }
   }
 

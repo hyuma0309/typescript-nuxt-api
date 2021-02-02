@@ -15,8 +15,6 @@ import { IProduct } from '@/interfaces/IProducts';
 
 @Component
 export default class Products extends Vue {
-  public id!: number;
-
   public get products(): IProduct[] {
     return this.$store.getters['product/getProducts'];
   }
@@ -25,9 +23,8 @@ export default class Products extends Vue {
     this.$emit('delete', id);
   }
 
-  public edit(id: string){
-    this.$router.push({ path: 'edit', query: { id } })
+  public edit(id: string) {
+    this.$router.push({ path: 'edit', query: { id } });
   }
-
 }
 </script>

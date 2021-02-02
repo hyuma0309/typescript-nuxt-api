@@ -6,7 +6,7 @@ export interface IState {
   // 全商品
   products: IProduct[] | null;
   // 商品一件
-  product: IProduct | null;
+  product: IProduct;
 }
 
 /**
@@ -21,7 +21,8 @@ export const state = (): IState => ({
     title: '',
     description: '',
     price: 0,
-    image: ''
+    image: '',
+    isVisible: false,
   },
 });
 
@@ -51,6 +52,11 @@ export const mutations = {
   saveProduct(state: IState, product: IProduct): void {
     state.product = product;
   },
+
+  // 検索flag
+  changeFlag(state: IState, product: IProduct): void {
+    product.isVisible = !product.isVisible;
+  },
 };
 
 /**
@@ -68,6 +74,9 @@ export const actions = {
           'Content-Type': 'application/json',
         },
       });
+      products.data.forEach((product: any) => {
+        product.isVisible = false;
+      });
       commit('saveProducts', products.data);
     } catch (error) {
       throw error;
@@ -77,17 +86,14 @@ export const actions = {
   // 一件取得処理
   async getProduct({ commit }: any, { token, id }: any) {
     try {
-      const response = await axios.get(
-        `${API_ENDPOINT.JAVA_APP_HOST}/${id}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      commit('saveProduct', response.data)
-    } catch(error) {
-      throw error
+      const response = await axios.get(`${API_ENDPOINT.JAVA_APP_HOST}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      commit('saveProduct', response.data);
+    } catch (error) {
+      throw error;
     }
   },
 
@@ -107,7 +113,7 @@ export const actions = {
 
   // 編集処理
   async editProduct({}: any, { token, id, payload }: any) {
-    console.log(payload)
+    console.log(payload);
     try {
       await axios.put(`${API_ENDPOINT.JAVA_APP_HOST}/${id}`, payload, {
         headers: {

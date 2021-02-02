@@ -7,6 +7,7 @@ export interface IProduct {
   description: string;
   price: number;
   image: string;
+  isVisible: boolean;
 }
 
 /**
