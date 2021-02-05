@@ -111,6 +111,21 @@ export const actions = {
     }
   },
 
+  // 画像アップロード
+  async imageUpload({}: any, { token, id, payload }: any) {
+    console.log(`${API_ENDPOINT.JAVA_APP_HOST}/${id}/images`)
+    try {
+      await axios.patch(`${API_ENDPOINT.JAVA_APP_HOST}/${id}/images`, payload, {
+        headers: {
+          Authorization: `Bearer:${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // 編集処理
   async editProduct({}: any, { token, id, payload }: any) {
     console.log(payload);

@@ -2,7 +2,7 @@
   <div>
     <Authentication />
     <Form @send="createItem" />
-    <Products @delete="removeItem" />
+    <Products @delete="removeItem" @file="uploadImage"/>
     <br />
     <input @focus="onFocus" type="text" placeholder="タイトル" v-model="keyword" />
     <button @click="searchItem()">検索</button>
@@ -78,6 +78,20 @@ export default class IndexPage extends Vue {
       await this.$store.dispatch('product/deleteProduct', { token: token, id: value });
       // 全商品を再取得（商品一覧の更新）
       await this.$store.dispatch('product/getAll', token);
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
+  public async uploadImage(value: any) {
+    const token = TokenUtil.getToken();
+    try {
+      // 画像のアップロード
+      await this.$store.dispatch('product/imageUpload', {
+        token: token,
+        id: value.id,
+        payload: value.image,
+      });
     } catch (error) {
       console.log(error.response);
     }
