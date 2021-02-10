@@ -5,10 +5,13 @@
       <span>{{ product.description }}</span>
       <span>{{ product.price }}円</span>
       <div>
-        <img v-if="product.imagePath" :src="`http://localhost:8080/api/products/${product.id}/images/${product.imagePath}`" style="width: 5%; height: 56.25%"/>
+        <img
+          v-if="product.imagePath"
+          :src="`${localhost}/${product.id}/images/${product.imagePath}`"
+          style="width: 5%; height: 56.25%"
+        />
         <img v-else src="../assets/noImage.png" style="width: 5%; height: 56.25%" />
-
-        <input type="file" @change="setImage($event,product.id)"/>
+        <input type="file" @change="setImage($event,product.id)" />
         <button @click="remove(product.id)">削除</button>
         <nuxt-link :to="`/edit?id=${product.id}`">編集</nuxt-link>
       </div>
@@ -18,9 +21,12 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
 import { IProduct } from '@/interfaces/IProducts';
+import { API_ENDPOINT } from '@/constants/api';
 
 @Component
 export default class Products extends Vue {
+  public localhost: string = API_ENDPOINT.JAVA_APP_HOST;
+
   public get products(): IProduct[] {
     return this.$store.getters['product/getProducts'];
   }
@@ -35,7 +41,7 @@ export default class Products extends Vue {
     const data = new FormData();
 
     data.append('productImage', file);
-    this.$emit('file', {id: id , image: data});
+    this.$emit('file', { id: id, image: data });
   }
 }
 </script>

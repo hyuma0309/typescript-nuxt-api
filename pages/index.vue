@@ -14,7 +14,7 @@
         {{ product.price }}円
         <img
           v-if="product.imagePath"
-          :src="`http://localhost:8080/api/products/${product.id}/images/${product.imagePath}`"
+          :src="`${localhost}/${product.id}/images/${product.imagePath}`"
           style="width: 5%; height: 56.25%"
         />
         <img v-else src="../assets/noImage.png" style="width: 5%; height: 56.25%" />
@@ -28,6 +28,7 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import Products from '@/components/products.vue';
 import Form from '@/components/form.vue';
+import { API_ENDPOINT } from '@/constants/api';
 import { IProduct, IProductPayload } from '@/interfaces/IProducts';
 import { TokenUtil } from '@/utilities/tokenUtil';
 
@@ -41,6 +42,7 @@ export default class IndexPage extends Vue {
   public keyword: string = '';
   public errorMessage: string = '';
   public tokenMessage: string = '認証コードを入力してください';
+  public localhost: string = API_ENDPOINT.JAVA_APP_HOST;
 
   /** 入力欄を操作時、検索結果を削除 */
   public onFocus(): void {
