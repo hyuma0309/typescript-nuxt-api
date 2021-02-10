@@ -1,8 +1,9 @@
 <template>
   <div>
-    <Authentication />
+    {{tokenMessage}}
+    <nuxt-link :to="`/authentication`">認証画面</nuxt-link>
     <Form @send="createItem" />
-    <Products @delete="removeItem" @file="uploadImage"/>
+    <Products @delete="removeItem" @file="uploadImage" />
     <br />
     <input @focus="onFocus" type="text" placeholder="タイトル" v-model="keyword" />
     <button @click="searchItem()">検索</button>
@@ -11,6 +12,12 @@
         {{ product.title }}
         {{ product.description }}
         {{ product.price }}円
+        <img
+          v-if="product.imagePath"
+          :src="`http://localhost:8080/api/products/${product.id}/images/${product.imagePath}`"
+          style="width: 5%; height: 56.25%"
+        />
+        <img v-else src="../assets/noImage.png" style="width: 5%; height: 56.25%" />
       </div>
     </div>
     {{ errorMessage }}
@@ -21,7 +28,6 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import Products from '@/components/products.vue';
 import Form from '@/components/form.vue';
-import Authentication from '@/components/authentication.vue';
 import { IProduct, IProductPayload } from '@/interfaces/IProducts';
 import { TokenUtil } from '@/utilities/tokenUtil';
 
@@ -29,19 +35,19 @@ import { TokenUtil } from '@/utilities/tokenUtil';
   components: {
     Products,
     Form,
-    Authentication,
   },
 })
 export default class IndexPage extends Vue {
   public keyword: string = '';
   public errorMessage: string = '';
+  public tokenMessage: string = '認証コードを入力してください';
 
   /** 入力欄を操作時、検索結果を削除 */
   public onFocus(): void {
     const matchTitle = this.products.filter(product => product.isVisible == true);
-      matchTitle.forEach(product => {
-        this.$store.commit('product/changeFlag', product);
-      });
+    matchTitle.forEach(product => {
+      this.$store.commit('product/changeFlag', product);
+    });
   }
 
   public get products(): IProduct[] {
@@ -52,7 +58,7 @@ export default class IndexPage extends Vue {
     const token = TokenUtil.getToken();
     try {
       await this.$store.dispatch('product/getAll', token);
-      console.log('成功');
+      this.tokenMessage = '認証に成功しました';
     } catch (error) {
       console.log(error.response);
     }
@@ -65,7 +71,6 @@ export default class IndexPage extends Vue {
       await this.$store.dispatch('product/createProduct', { token: token, payload: value });
       // 作成したproductを追加し、一覧を更新する
       await this.$store.dispatch('product/getAll', token);
-      console.log('成功');
     } catch (error) {
       console.log(error.response);
     }
@@ -87,11 +92,13 @@ export default class IndexPage extends Vue {
     const token = TokenUtil.getToken();
     try {
       // 画像のアップロード
-      await this.$store.dispatch('product/imageUpload', {
+      const response = await this.$store.dispatch('product/imageUpload', {
         token: token,
         id: value.id,
         payload: value.image,
       });
+      // 全商品を再取得（商品一覧の更新）
+      await this.$store.dispatch('product/getAll', token);
     } catch (error) {
       console.log(error.response);
     }
@@ -104,7 +111,6 @@ export default class IndexPage extends Vue {
       this.keyword = '';
     } else {
       matchTitle.forEach(product => {
-        console.log(product.isVisible)
         this.$store.commit('product/changeFlag', product);
       });
       this.errorMessage = '';
@@ -116,7 +122,7 @@ export default class IndexPage extends Vue {
    * ライフサイクル
    * localStrageを参照するためmountedで取得
    */
-  mounted() {
+  public mounted() {
     this.getAll();
   }
 }

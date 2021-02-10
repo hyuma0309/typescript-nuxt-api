@@ -52,7 +52,6 @@ export const mutations = {
   saveProduct(state: IState, product: IProduct): void {
     state.product = product;
   },
-
   // 検索flag
   changeFlag(state: IState, product: IProduct): void {
     product.isVisible = !product.isVisible;
@@ -113,9 +112,8 @@ export const actions = {
 
   // 画像アップロード
   async imageUpload({}: any, { token, id, payload }: any) {
-    console.log(`${API_ENDPOINT.JAVA_APP_HOST}/${id}/images`)
     try {
-      await axios.patch(`${API_ENDPOINT.JAVA_APP_HOST}/${id}/images`, payload, {
+       await axios.patch(`${API_ENDPOINT.JAVA_APP_HOST}/${id}/images`, payload, {
         headers: {
           Authorization: `Bearer:${token}`,
           'Content-Type': 'application/json',

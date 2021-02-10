@@ -11,11 +11,10 @@ export interface IProduct {
 }
 
 /**
- * 商品取得APIインターフェイス
+ * 商品作成APIインターフェイス
  */
 export interface IProductPayload {
   title: string;
   description: string;
   price: number;
-  imageBase64: string;
 }

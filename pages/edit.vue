@@ -4,6 +4,12 @@
     <span>{{ product.title }}</span>
     <span>{{ product.description }}</span>
     <span>{{ product.price }}円</span>
+    <img
+      v-if="product.imagePath"
+      :src="`http://localhost:8080/api/products/${product.id}/images/${product.imagePath}`"
+      style="width: 5%; height: 56.25%"
+    />
+    <img v-else src="../assets/noImage.png" style="width: 5%; height: 56.25%" />
     <Form @send="editItem" />
   </div>
 </template>
@@ -19,7 +25,7 @@ import { TokenUtil } from '@/utilities/tokenUtil';
     Form,
   },
 })
-export default class edit extends Vue {
+export default class Edit extends Vue {
   public get product(): IProduct {
     return this.$store.getters['product/getProduct'];
   }
@@ -43,9 +49,13 @@ export default class edit extends Vue {
   /**
    * ライフサイクル
    */
-  mounted() {
+  public mounted() {
     const token = localStorage.getItem('token')!.toString();
-    this.$store.dispatch('product/getProduct', { token: token, id: this.$route.query.id });
+    try {
+      this.$store.dispatch('product/getProduct', { token: token, id: this.$route.query.id });
+    } catch (error) {
+      console.log(error.response);
+    }
   }
 }
 </script>

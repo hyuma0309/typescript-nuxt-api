@@ -10,12 +10,18 @@ import { Vue, Component } from 'nuxt-property-decorator';
 import { TokenUtil } from '@/utilities/tokenUtil';
 
 @Component
-export default class Form extends Vue {
+export default class Authentication extends Vue {
   public token: string = '';
 
-  public tokenSend() {
+  public async tokenSend() {
     TokenUtil.setToken(this.token);
-    location.reload()
+    const token = TokenUtil.getToken();
+    try {
+      await this.$store.dispatch('product/getAll', token);
+      this.$router.push('/');
+    } catch (error) {
+      console.log(error.response);
+    }
   }
 }
 </script>

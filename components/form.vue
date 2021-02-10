@@ -22,13 +22,12 @@ export default class Form extends Vue {
     title: '',
     description: '',
     price: 0,
-    imageBase64: '',
   };
 
   public onSubmit() {
-    this.formData.title = this.title;
-    this.formData.description = this.description;
-    this.formData.price = this.price;
+    this.$set(this.formData, 'title', this.title)
+    this.$set(this.formData, 'description', this.description)
+    this.$set(this.formData, 'price', this.price)
     this.$emit('send', this.formData);
   }
 }
