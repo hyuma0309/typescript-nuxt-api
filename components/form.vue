@@ -2,7 +2,7 @@
   <div>
     <input type="text" placeholder="タイトル" v-model="title" />
     <input type="text" placeholder="説明" v-model="description" />
-    <input type="text" placeholder="値段" v-model="price" />
+    <input type="number" placeholder="値段" v-model="price" />
     <button @click="onSubmit">送信</button>
   </div>
 </template>

@@ -1,9 +1,12 @@
 <template>
   <ul>
+    <table class="table">
     <li v-for="(product, index) in products" :key="index">
-      <span>{{ product.title }}</span>
-      <span>{{ product.description }}</span>
-      <span>{{ product.price }}円</span>
+      <thead>
+      <th>{{ product.title }}</th>
+      <th>{{ product.description }}</th>
+      <th>{{ product.price }}円</th>
+      </thead>
       <div>
         <img
           v-if="product.imagePath"
@@ -12,16 +15,19 @@
         />
         <img v-else src="../assets/noImage.png" style="width: 5%; height: 56.25%" />
         <input type="file" @change="setImage($event,product.id)" />
-        <button @click="remove(product.id)">削除</button>
+        <button class="btn btn-outline-success" @click="remove(product.id)">削除</button>
         <nuxt-link :to="`/edit?id=${product.id}`">編集</nuxt-link>
       </div>
     </li>
+    </table>
   </ul>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
 import { IProduct } from '@/interfaces/IProducts';
 import { API_ENDPOINT } from '@/constants/api';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 @Component
 export default class Products extends Vue {
