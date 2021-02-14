@@ -1,20 +1,32 @@
-# typescript-nuxt-api
+# フロントエンド(Typescript-nuxt-api 商品登録アプリ)
 
-## Build Setup
+## 使用した技術要素
 
-```bash
-# install dependencies
-$ npm install
+| 技術 | バージョン |
+|:-----------|------------:|
+| Nuxt       |         @nuxt/cli v2.13.3 | 
+| Vuex     |      3.5.1 |   
+| TypeScript       |         0.4.10 |        
+| node.js       |            v14.15.5 |  
+| bootstrap       |            4.5.0 |  
 
-# serve with hot reload at localhost:3000
-$ npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+### 環境構築手順
+# node.jsをインストール
+$ brew install node  
 
-# generate static project
-$ npm run generate
-```
+# yarnをインストール
+$ npm install -g yarn
+$ yarn install
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+# サービスの起動
+$ yarn run dev
+* HomePage URL : http://localhost:5000
+
+
+# java-apiを起動し、連携する
+* java-apiのapplication.ymlで
+frontend.url: http://localhost:5000に変更
+
+
+
